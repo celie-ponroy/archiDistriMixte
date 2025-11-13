@@ -1,19 +1,8 @@
-FROM python
-# can you find a lighter image?
-
+FROM python:3.9-slim
 WORKDIR /app
-
-# copy the requirements file in the workdir
-RUN
-
-# install the Python requirements
-RUN
-
-# grpc compilation of proto files or copy of generated files
-RUN
-
-# copy the app files and directories
-RUN
-
-# start movie.py when the container is started
-CMD 
+RUN apt-get update && apt-get install -y --no-install-recommends gcc protobuf-compiler && rm -rf /var/lib/apt/lists/*
+COPY ../requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+COPY . .
+EXPOSE 50051
+CMD ["python", "schedule.py"]
