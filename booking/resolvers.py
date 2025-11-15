@@ -1,9 +1,19 @@
 import json
 
 import requests 
+import grpc
+from protos import schedule_pb2, schedule_pb2_grpc
 
 USER_SERVICE_URL = "http://localhost:3203" 
-MOVIE_SERVICE_URL = "http://localhost:3002" 
+MOVIE_SERVICE_URL = "http://localhost:3002/graphql" 
+
+def is_movie_scheduled(date: str, movie_id: str) -> bool:
+    # Return true si le movie existe à la bonne date
+    with grpc.insecure_channel("localhost:50051") as channel:
+        stub = schedule_pb2_grpc.ScheduleStub(channel)
+        schedule = stub.GetScheduleByDate(schedule_pb2.ScheduleDate(date=date))
+        return movie_id in schedule.movies
+
 
 def booking_with_id(_, info, userid):
     # Récupérer l'utilisateur courant depuis le contexte
@@ -38,47 +48,60 @@ def booking_with_id(_, info, userid):
                             "showtime": date_str
                         })
         return result
+    
+def movie_exists(_id):
+    with open('./data/movies.json', "r") as file:
+        movies = json.load(file)
+        for movie in movies.get('movies', []):
+            if movie['id'] == _id:
+                return True
+    return False
+
             
-def create_booking(_, info, userId, movieId, date):
+def create_booking(_, info, userid, movieId, date):
     # Récupérer l'utilisateur courant
     requester_id = info.context.headers.get("X-User-Id")
-    print(requester_id)
     if not requester_id:
         raise Exception("Utilisateur non authentifié")
 
-    # Vérifier si l'utilisateur courant est admin ou propriétaire
+    # Vérifier droits
     user_response = requests.get(f"{USER_SERVICE_URL}/users/{requester_id}")
     if user_response.status_code != 200:
         raise Exception("Utilisateur courant introuvable")
     user = user_response.json()
-
     is_admin = user.get("admin", False)
-    is_owner = str(requester_id) == str(userId)
-
+    is_owner = str(requester_id) == str(userid)
     if not (is_admin or is_owner):
         raise Exception("Accès refusé : seuls les admins ou le propriétaire peuvent créer cette réservation")
 
-    # Vérifier que le movie existe via microservice Movie GraphQL
+    # Vérifier que le film existe (GraphQL)
     query = """
-    query ($id: ID!) {
-      movie_with_id(id: $id) {
-        id
-        title
-      }
+    query($id: String!) {
+        movie_with_id(_id: $id) {
+            id
+        }
     }
     """
     variables = {"id": movieId}
-    response = requests.post(MOVIE_SERVICE_URL, json={"query": query, "variables": variables})
+    response = requests.post(
+        MOVIE_SERVICE_URL,
+        json={"query": query, "variables": variables},
+        headers={"Content-Type": "application/json"}
+    )
     movie_data = response.json()
     if not movie_data.get("data") or not movie_data["data"].get("movie_with_id"):
         raise Exception(f"Movie avec id {movieId} introuvable")
+
+    # 🔹 Vérifier la disponibilité dans Schedule via gRPC
+    if not is_movie_scheduled(date, movieId):
+        raise Exception(f"Le film {movieId} n'est pas programmé le {date}")
 
     # Lecture du fichier bookings
     with open('./data/bookings.json', "r") as rfile:
         bookings_data = json.load(rfile)
 
     # Chercher le booking existant pour l'utilisateur
-    user_booking = next((b for b in bookings_data.get("bookings", []) if b.get("userid") == userId), None)
+    user_booking = next((b for b in bookings_data.get("bookings", []) if b.get("userid") == userid), None)
 
     new_date_entry = {
         "date": date,
@@ -86,12 +109,10 @@ def create_booking(_, info, userId, movieId, date):
     }
 
     if user_booking:
-        # Ajouter la nouvelle date
         user_booking["dates"].append(new_date_entry)
     else:
-        # Créer un nouveau booking pour cet utilisateur
         new_booking = {
-            "userid": userId,
+            "userid": userid,
             "dates": [new_date_entry]
         }
         bookings_data["bookings"].append(new_booking)
@@ -103,17 +124,48 @@ def create_booking(_, info, userId, movieId, date):
 
     return user_booking
 
-def cancel_booking(_,info,_id):
-    newbookings = {}
-    canceledbooking = {}
-    with open('{}/data/bookings.json'.format("."), "r") as rfile:
-        bookings = json.load(rfile)
-        for booking in bookings['bookings']:
-            if booking['id'] == _id:
-                canceledbooking = booking
-                bookings['bookings'].remove(booking)
-                newbookings = bookings
-    with open('{}/data/bookings.json'.format("."), "w") as wfile:
-        json.dump(newbookings, wfile)
-    return canceledbooking
+
+def cancel_booking(_, info, userid, movieId, date):
+    # Récupérer l'utilisateur courant
+    requester_id = info.context.headers.get("X-User-Id")
+    if not requester_id:
+        raise Exception("Utilisateur non authentifié")
+
+    # Vérifier si l'utilisateur courant est admin ou propriétaire
+    user_response = requests.get(f"{USER_SERVICE_URL}/users/{requester_id}")
+    if user_response.status_code != 200:
+        raise Exception("Utilisateur courant introuvable")
+    user = user_response.json()
+
+    is_admin = user.get("admin", False)
+    is_owner = str(requester_id) == str(userid)
+
+    if not (is_admin or is_owner):
+        raise Exception("Accès refusé : seuls les admins ou le propriétaire peuvent annuler cette réservation")
+
+    # Lecture du fichier bookings
+    with open('./data/bookings.json', "r") as rfile:
+        bookings_data = json.load(rfile)
+
+    # Chercher le booking de l'utilisateur
+    user_booking = next((b for b in bookings_data.get("bookings", []) if b.get("userid") == userid), None)
+    if not user_booking:
+        raise Exception("Booking introuvable pour cet utilisateur")
+
+    # Chercher la date correspondante et retirer le movie
+    for date_entry in user_booking["dates"]:
+        if date_entry["date"] == date and movieId in date_entry["movies"]:
+            date_entry["movies"].remove(movieId)
+
+    # Supprimer les dates vides
+    user_booking["dates"] = [d for d in user_booking["dates"] if d["movies"]]
+
+    # Supprimer le booking si plus de dates
+    bookings_data["bookings"] = [b for b in bookings_data["bookings"] if b["dates"]]
+
+    # Écriture du fichier
+    with open('./data/bookings.json', "w") as wfile:
+        json.dump(bookings_data, wfile, indent=2)
+
+    return user_booking
 

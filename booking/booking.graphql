@@ -4,8 +4,8 @@ type Query {
 
 
 type Mutation {
-  create_booking(userId: ID!, movieId: ID!, date: String!): Booking
-  cancel_booking(id: ID!): Booking
+  create_booking(userid: ID!, movieId: ID!, date: String!): Booking
+  cancel_booking(userid: ID!,movieId: ID!, date:String!): Booking
 }
 
 type DateEntry {
@@ -15,7 +15,7 @@ type DateEntry {
 
 type Booking {
   userid: ID!
-  showtime: String!
-  movieId: String!
-  dates: [DateEntry!]!
+  showtime: String
+  movieId: String
+  dates: [DateEntry!]
 }
