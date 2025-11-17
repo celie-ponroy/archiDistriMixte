@@ -1,0 +1,188 @@
+type: collection.insomnia.rest/5.0
+name: Movies
+meta:
+  id: wrk_7ec6c1e2b3fd43d796906610844f9dfd
+  created: 1758288554263
+  modified: 1758290555314
+  description: ""
+collection:
+  - url: http://127.0.0.1:3200/movies/:id
+    name: Get Movie By Id
+    meta:
+      id: req_d3366acd94614811a639d3ec44ceb77d
+      created: 1758288554267
+      modified: 1758288997690
+      isPrivate: false
+      description: ""
+      sortKey: -1758288554267
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/11.6.1
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+    pathParameters:
+      - name: id
+        value: ""
+  - url: http://127.0.0.1:3200/json
+    name: Get Json Movies
+    meta:
+      id: req_a08f589bc27a492cbed6352eb69ecb45
+      created: 1758289003043
+      modified: 1758289024739
+      isPrivate: false
+      description: ""
+      sortKey: -1758289003043
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/11.6.1
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://127.0.0.1:3200/moviesbytitle
+    name: Get Movies By Title
+    meta:
+      id: req_86df3116298042c8b0d827f89f633930
+      created: 1758289027637
+      modified: 1758289154967
+      isPrivate: false
+      description: ""
+      sortKey: -1758288554167
+    method: GET
+    parameters:
+      - id: pair_f9784cb7f9ae46a7ad29d59e52ccadbd
+        name: title
+        value: The Good Dinosaur
+        description: ""
+        disabled: false
+    headers:
+      - name: User-Agent
+        value: insomnia/11.6.1
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://127.0.0.1:3200
+    name: Get Page Movies
+    meta:
+      id: req_b20d3993586546e39c6672ccc50b2a3c
+      created: 1758289283094
+      modified: 1758289306706
+      isPrivate: false
+      description: ""
+      sortKey: -1758289283094
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/11.6.1
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://127.0.0.1:3200/movies/test
+    name: Post Movie
+    meta:
+      id: req_d1383f6eb7a04eff839d41d6fc5bd95e
+      created: 1758289673827
+      modified: 1758289866937
+      isPrivate: false
+      description: ""
+      sortKey: -1758288554067
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "title": "Test",
+          "rating": 1.2,
+          "director": "Someone",
+          "id":"test"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/11.6.1
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://127.0.0.1:3200/movies/test/3
+    name: Put Movie Rate
+    meta:
+      id: req_846fde9fe0994f52b94160ff4c091230
+      created: 1758289782701
+      modified: 1758290021230
+      isPrivate: false
+      description: ""
+      sortKey: -1758288553967
+    method: PUT
+    headers:
+      - name: User-Agent
+        value: insomnia/11.6.1
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://127.0.0.1:3200/movies/test
+    name: Delete Movie
+    meta:
+      id: req_03a9bfa2f347452d8a65655d4ae2654a
+      created: 1758290023915
+      modified: 1758290060355
+      isPrivate: false
+      description: ""
+      sortKey: -1758288553867
+    method: DELETE
+    headers:
+      - name: User-Agent
+        value: insomnia/11.6.1
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_bfa85974e265d4a858888c7b813c8cf49a137b6a
+    created: 1758288554265
+    modified: 1758288554265
+environments:
+  name: Base Environment
+  meta:
+    id: env_bfa85974e265d4a858888c7b813c8cf49a137b6a
+    created: 1758288554264
+    modified: 1758288554264
+    isPrivate: false

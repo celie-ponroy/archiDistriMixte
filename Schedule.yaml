@@ -1,0 +1,142 @@
+type: collection.insomnia.rest/5.0
+name: Schedule
+meta:
+  id: wrk_e8f6b38fd3a54204906fe5a489b0de27
+  created: 1763202011301
+  modified: 1763202011301
+  description: ""
+collection:
+  - url: localhost:50051
+    name: Get All Schedules
+    meta:
+      id: greq_485e848650384242bf899401302324ac
+      created: 1763202017506
+      modified: 1763203596649
+      isPrivate: false
+      sortKey: -1763202017506
+      description: ""
+    body:
+      text: "{}"
+    protoFileId: pf_aa3f1704cf404d1bad348c01fabc0351
+    protoMethodName: /Schedule/GetAllSchedules
+    reflectionApi:
+      enabled: false
+      url: https://buf.build
+      apiKey: ""
+      module: buf.build/connectrpc/eliza
+  - url: localhost:50051
+    name: Get Movies By Date
+    meta:
+      id: greq_d43b13af7dd040439e3cbd420ed4aef3
+      created: 1763202287626
+      modified: 1763203607531
+      isPrivate: false
+      sortKey: -1763202017406
+      description: ""
+    body:
+      text: |
+        {
+          "date": "20151203"
+        }
+    metadata:
+      - id: pair_5ffbfe60641346409667c7e1870b99ac
+        name: ""
+        value: ""
+        description: ""
+        disabled: false
+    protoFileId: pf_aa3f1704cf404d1bad348c01fabc0351
+    protoMethodName: /Schedule/GetScheduleByDate
+    reflectionApi:
+      enabled: false
+      url: https://buf.build
+      apiKey: ""
+      module: buf.build/connectrpc/eliza
+  - url: localhost:50051
+    name: Create New Schedule
+    meta:
+      id: greq_63f82dbee3064377965380d7c6927e52
+      created: 1763202393461
+      modified: 1763203635250
+      isPrivate: false
+      sortKey: -1763202017306
+      description: ""
+    body:
+      text: |-
+        {
+        	"date": "20151201",
+        	"movies": ["720d006c-3a57-4b6a-b18f-9b713b073f3c"]
+        }
+    protoFileId: pf_aa3f1704cf404d1bad348c01fabc0351
+    protoMethodName: /Schedule/CreateSchedule
+    reflectionApi:
+      enabled: false
+      url: https://buf.build
+      apiKey: ""
+      module: buf.build/connectrpc/eliza
+  - url: localhost:50051
+    name: Delete Schedule
+    meta:
+      id: greq_5095d165c7394bed9c6a2b5b4b23f6a5
+      created: 1763202642005
+      modified: 1763203657936
+      isPrivate: false
+      sortKey: -1763202017206
+      description: ""
+    body:
+      text: |-
+        {
+        	"date": "20151201",
+        	"movies": ["720d006c-3a57-4b6a-b18f-9b713b073f3c"]
+        }
+    protoFileId: pf_aa3f1704cf404d1bad348c01fabc0351
+    protoMethodName: ""
+    reflectionApi:
+      enabled: false
+      url: https://buf.build
+      apiKey: ""
+      module: buf.build/connectrpc/eliza
+  - url: localhost:50051
+    name: Get Dates By Movies
+    meta:
+      id: greq_0da9c5fb883c4a12908da5635b9d5325
+      created: 1763202931923
+      modified: 1763203619218
+      isPrivate: false
+      sortKey: -1763202017356
+      description: ""
+    body:
+      text: |-
+        {
+        	"movie_id":"39ab85e5-5e8e-4dc5-afea-65dc368bd7ab"
+        }
+    metadata:
+      - id: pair_617b7cac501b430596d8950c43ad2fb1
+        name: ""
+        value: ""
+        description: ""
+        disabled: false
+      - id: pair_b6b7e4d8d0ac4c069ab68d66fb3d890b
+        name: ""
+        value: ""
+        description: ""
+        disabled: false
+    protoFileId: pf_aa3f1704cf404d1bad348c01fabc0351
+    protoMethodName: /Schedule/GetDatesByMovie
+    reflectionApi:
+      enabled: false
+      url: https://buf.build
+      apiKey: ""
+      module: buf.build/connectrpc/eliza
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_ccc6f0257a044568896c60cfdc40e4b8d67e4368
+    created: 1763202011303
+    modified: 1763202011303
+environments:
+  name: Base Environment
+  meta:
+    id: env_ccc6f0257a044568896c60cfdc40e4b8d67e4368
+    created: 1763202011302
+    modified: 1763202011302
+    isPrivate: false
