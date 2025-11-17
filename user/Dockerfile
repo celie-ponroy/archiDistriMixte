@@ -1,16 +1,9 @@
-FROM python
-# can you find a lighter image?
-
+FROM python:3.9-slim
 WORKDIR /app
 
-# copy the requirements file in the workdir
-RUN
+COPY ../requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+COPY . .
+EXPOSE 5000
+CMD ["python", "user.py"]
 
-# install the Python requirements
-RUN
-
-# copy the app files and directories
-RUN
-
-# start user.py when the container is started
-CMD 

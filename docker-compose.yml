@@ -1,7 +1,57 @@
+version: "3.9"
 services:
   movie:
     build: ./movie/
     ports:
       - "3200:3200"
-  # to continue
+    environment:
+      - USE_MONGO=true
+      - MONGO_URL=mongodb://mongo:27017/archiDistriDB
+    depends_on:
+      - mongo
+    restart: unless-stopped
 
+  user:
+    build: ./user/
+    ports:
+      - "3201:5000"
+    environment:
+      - USE_MONGO=true
+      - MONGO_URL=mongodb://mongo:27017/archiDistriDB
+    depends_on:
+      - mongo
+    restart: unless-stopped
+
+  booking:
+    build: ./booking/
+    ports:
+      - "3202:5000"
+    environment:
+      - USE_MONGO=true
+      - MONGO_URL=mongodb://mongo:27017/archiDistriDB
+    depends_on:
+      - mongo
+    restart: unless-stopped
+
+  schedule:
+    build: ./schedule/
+    ports:
+      - "3203:50051"
+    environment:
+      - USE_MONGO=true
+      - MONGO_URL=mongodb://mongo:27017/archiDistriDB
+    depends_on:
+      - mongo
+    restart: unless-stopped
+
+  mongo:
+    image: mongo:6
+    container_name: mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  mongo_data:
