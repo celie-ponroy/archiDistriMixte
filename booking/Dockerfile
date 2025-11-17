@@ -1,7 +1,6 @@
-FROM python:3.9-slim
+FROM python:3.8-alpine
 WORKDIR /app
-COPY ../requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
-COPY . .
-EXPOSE 5000
-CMD ["python", "booking.py"]
+COPY requirements.txt /app
+RUN pip install -r requirements.txt
+ADD . /app/
+CMD ["python","-u","booking.py"]
