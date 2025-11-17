@@ -1,0 +1,445 @@
+type: collection.insomnia.rest/5.0
+name: Booking
+meta:
+  id: wrk_5c6cbe2f20e0487daa8234721fa3ab08
+  created: 1758294411397
+  modified: 1758294411397
+  description: ""
+collection:
+  - url: http://127.0.0.1:3001/graphql
+    name: Get Bookings User Id Admin
+    meta:
+      id: req_d00e08529d0a46f295a8bb5df3a6aeed
+      created: 1758294414035
+      modified: 1763204813419
+      isPrivate: false
+      description: ""
+      sortKey: -1758294414035
+    method: POST
+    body:
+      mimeType: application/graphql
+      text: '{"query":"\nquery {\n  booking_with_id(userid: \"garret_heaton\")
+        {\n    userid\n    showtime\n\t\tmovieId\n  }\n}\n"}'
+    parameters:
+      - id: pair_dd14c89e54de4273906b8d31924f902f
+        name: current_user
+        value: chris_rivers
+        description: ""
+        disabled: false
+    headers:
+      - name: Content-Type
+        value: application/json
+        id: pair_2a9004ad93b44cb1b0914d3d8ae5c135
+      - name: User-Agent
+        value: insomnia/11.6.1
+        id: pair_a328ad2474bc4faa952b473ae58c2e70
+      - id: pair_ee2232c8b33049828a91d1b345f0ffe9
+        name: X-User-Id
+        value: chris_rivers
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://127.0.0.1:3001/graphql
+    name: Create new booking Fail (User)
+    meta:
+      id: req_c2ed839865984f08ac73d56e01a4bd91
+      created: 1758295318238
+      modified: 1763204984784
+      isPrivate: false
+      description: ""
+      sortKey: -1758294413935
+    method: POST
+    body:
+      mimeType: application/graphql
+      text: '{"query":"mutation {\n  create_booking(userid: \"celie_loie\", movieId:
+        \"720d006c-3a57-4b6a-b18f-9b713b073f3c\", date: \"20251201\")
+        {\n    userid\n    dates {\n      date\n      movies\n    }\n  }\n}\n"}'
+    parameters:
+      - id: pair_937b6ae59ca549228a1e5ef4a1fc9e56
+        name: ""
+        value: ""
+        description: ""
+        disabled: false
+    headers:
+      - name: Content-Type
+        value: application/json
+        id: pair_b5eb5aac37294e6cb841093b5039f8f4
+      - name: User-Agent
+        value: insomnia/11.6.1
+        id: pair_2acc114ad32e4eaca7db086b98331703
+      - id: pair_e43283309a7d47b9873f4a101b67dbc8
+        name: X-User-Id
+        value: garret_heaton
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://127.0.0.1:3001/graphql
+    name: Cancel Booking as User
+    meta:
+      id: req_b1f2d86ab9714759a2a9698169a5e864
+      created: 1758366318087
+      modified: 1763205204917
+      isPrivate: false
+      description: ""
+      sortKey: -1758294413835
+    method: POST
+    body:
+      mimeType: application/graphql
+      text: '{"query":"mutation {\n  cancel_booking(userid: \"celie_loie\", movieId:
+        \"720d006c-3a57-4b6a-b18f-9b713b073f3c\", date: \"20151130\")
+        {\n    userid\n    dates {\n      date\n      movies\n    }\n  }\n}\n"}'
+    headers:
+      - name: Content-Type
+        value: application/json
+        id: pair_24ee4bc01d0a44ddb07134c57cf1c355
+      - name: User-Agent
+        value: insomnia/11.6.1
+        id: pair_bd2e406ab4ff4299b0d17cba3df83a33
+      - id: pair_47bf8dfe73534225b5a5d0b2451b0fdb
+        name: X-User-Id
+        value: celie_loie
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://127.0.0.1:3001/graphql
+    name: Get Bookings User Id User
+    meta:
+      id: req_acf5fc57f4a74ad68c6a11e2e135783b
+      created: 1763041361398
+      modified: 1763205540094
+      isPrivate: false
+      description: ""
+      sortKey: -1758294413985
+    method: POST
+    body:
+      mimeType: application/graphql
+      text: '{"query":"\nquery {\n  booking_with_id(userid: \"garret_heaton\")
+        {\n    userid\n    showtime\n\t\tmovieId\n  }\n}\n"}'
+    parameters:
+      - id: pair_84438ff498b845a980f276c3c610d2cc
+        name: ""
+        value: ""
+        description: ""
+        disabled: false
+    headers:
+      - name: Content-Type
+        value: application/json
+        id: pair_2a9004ad93b44cb1b0914d3d8ae5c135
+      - name: User-Agent
+        value: insomnia/11.6.1
+        id: pair_a328ad2474bc4faa952b473ae58c2e70
+      - id: pair_ee2232c8b33049828a91d1b345f0ffe9
+        name: X-User-Id
+        value: garret_heaton
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://127.0.0.1:3001/graphql
+    name: Get Bookings User Id Fail
+    meta:
+      id: req_1133a68088a54365800f92da57cb7339
+      created: 1763041383761
+      modified: 1763041392609
+      isPrivate: false
+      description: ""
+      sortKey: -1758294413960
+    method: POST
+    body:
+      mimeType: application/graphql
+      text: '{"query":"\nquery {\n  booking_with_id(userid: \"garret_heaton\")
+        {\n    userid\n    showtime\n\t\tmovieId\n  }\n}\n"}'
+    parameters:
+      - id: pair_dd14c89e54de4273906b8d31924f902f
+        name: current_user
+        value: chris_rivers
+        description: ""
+        disabled: false
+    headers:
+      - name: Content-Type
+        value: application/json
+        id: pair_2a9004ad93b44cb1b0914d3d8ae5c135
+      - name: User-Agent
+        value: insomnia/11.6.1
+        id: pair_a328ad2474bc4faa952b473ae58c2e70
+      - id: pair_ee2232c8b33049828a91d1b345f0ffe9
+        name: X-User-Id
+        value: celie_loie
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://127.0.0.1:3001/graphql
+    name: Create new booking Admin
+    meta:
+      id: req_6e6aff6d113347b0ba0ef2277578d4b3
+      created: 1763041418512
+      modified: 1763205060643
+      isPrivate: false
+      description: ""
+      sortKey: -1758294413885
+    method: POST
+    body:
+      mimeType: application/graphql
+      text: '{"query":"mutation {\n  create_booking(userid: \"celie_loie\", movieId:
+        \"720d006c-3a57-4b6a-b18f-9b713b073f3c\", date: \"20151130\")
+        {\n    userid\n    dates {\n      date\n      movies\n    }\n  }\n}\n"}'
+    parameters:
+      - id: pair_937b6ae59ca549228a1e5ef4a1fc9e56
+        name: ""
+        value: ""
+        description: ""
+        disabled: false
+    headers:
+      - name: Content-Type
+        value: application/json
+        id: pair_b5eb5aac37294e6cb841093b5039f8f4
+      - name: User-Agent
+        value: insomnia/11.6.1
+        id: pair_2acc114ad32e4eaca7db086b98331703
+      - id: pair_e43283309a7d47b9873f4a101b67dbc8
+        name: X-User-Id
+        value: chris_rivers
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://127.0.0.1:3001/graphql
+    name: Create new booking User
+    meta:
+      id: req_c28a37e79f6a4738a6d43fda511c18bb
+      created: 1763041433749
+      modified: 1763205047425
+      isPrivate: false
+      description: ""
+      sortKey: -1758294413860
+    method: POST
+    body:
+      mimeType: application/graphql
+      text: '{"query":"mutation {\n  create_booking(userid: \"celie_loie\", movieId:
+        \"720d006c-3a57-4b6a-b18f-9b713b073f3c\", date: \"20151130\")
+        {\n    userid\n    dates {\n      date\n      movies\n    }\n  }\n}\n"}'
+    parameters:
+      - id: pair_937b6ae59ca549228a1e5ef4a1fc9e56
+        name: ""
+        value: ""
+        description: ""
+        disabled: false
+    headers:
+      - name: Content-Type
+        value: application/json
+        id: pair_b5eb5aac37294e6cb841093b5039f8f4
+      - name: User-Agent
+        value: insomnia/11.6.1
+        id: pair_2acc114ad32e4eaca7db086b98331703
+      - id: pair_e43283309a7d47b9873f4a101b67dbc8
+        name: X-User-Id
+        value: celie_loie
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://127.0.0.1:3001/graphql
+    name: Cancel Booking Fail (admin or user)
+    meta:
+      id: req_dbd2e98cba1c4eae8157462ec5a39973
+      created: 1763201005655
+      modified: 1763205303097
+      isPrivate: false
+      description: ""
+      sortKey: -1758293313738
+    method: POST
+    body:
+      mimeType: application/graphql
+      text: '{"query":"mutation {\n  cancel_booking(userid: \"celie_loie\", movieId:
+        \"720d006c-3a57-4b6a-b18f-9b713b073f3c\", date: \"20251201\")
+        {\n    userid\n    dates {\n      date\n      movies\n    }\n  }\n}\n"}'
+    headers:
+      - name: Content-Type
+        value: application/json
+        id: pair_24ee4bc01d0a44ddb07134c57cf1c355
+      - name: User-Agent
+        value: insomnia/11.6.1
+        id: pair_bd2e406ab4ff4299b0d17cba3df83a33
+      - id: pair_47bf8dfe73534225b5a5d0b2451b0fdb
+        name: X-User-Id
+        value: garret_heaton
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://127.0.0.1:3001/graphql
+    name: Cancel Booking Admin
+    meta:
+      id: req_b84f59aff1694e909854e2951620fa3e
+      created: 1763201030363
+      modified: 1763205212707
+      isPrivate: false
+      description: ""
+      sortKey: -1758292763689.5
+    method: POST
+    body:
+      mimeType: application/graphql
+      text: '{"query":"mutation {\n  cancel_booking(userid: \"celie_loie\", movieId:
+        \"720d006c-3a57-4b6a-b18f-9b713b073f3c\", date: \"20151130\")
+        {\n    userid\n    dates {\n      date\n      movies\n    }\n  }\n}\n"}'
+    headers:
+      - name: Content-Type
+        value: application/json
+        id: pair_24ee4bc01d0a44ddb07134c57cf1c355
+      - name: User-Agent
+        value: insomnia/11.6.1
+        id: pair_bd2e406ab4ff4299b0d17cba3df83a33
+      - id: pair_47bf8dfe73534225b5a5d0b2451b0fdb
+        name: X-User-Id
+        value: chris_rivers
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://127.0.0.1:3001/graphql
+    name: Create new booking Fail (Schedule)
+    meta:
+      id: req_3c54455f1b5d4fadb0a0b4fcf47a1885
+      created: 1763204994753
+      modified: 1763205023943
+      isPrivate: false
+      description: ""
+      sortKey: -1758294413910
+    method: POST
+    body:
+      mimeType: application/graphql
+      text: '{"query":"mutation {\n  create_booking(userid: \"celie_loie\", movieId:
+        \"720d006c-3a57-4b6a-b18f-9b713b073f3c\", date: \"20251202\")
+        {\n    userid\n    dates {\n      date\n      movies\n    }\n  }\n}\n"}'
+    parameters:
+      - id: pair_937b6ae59ca549228a1e5ef4a1fc9e56
+        name: ""
+        value: ""
+        description: ""
+        disabled: false
+    headers:
+      - name: Content-Type
+        value: application/json
+        id: pair_b5eb5aac37294e6cb841093b5039f8f4
+      - name: User-Agent
+        value: insomnia/11.6.1
+        id: pair_2acc114ad32e4eaca7db086b98331703
+      - id: pair_e43283309a7d47b9873f4a101b67dbc8
+        name: X-User-Id
+        value: celie_loie
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://127.0.0.1:3001/graphql
+    name: Cancel Booking Fail (not exist)
+    meta:
+      id: req_bf3422c27c7446f68fa811444402434e
+      created: 1763205272841
+      modified: 1763205281752
+      isPrivate: false
+      description: ""
+      sortKey: -1758293038713.75
+    method: POST
+    body:
+      mimeType: application/graphql
+      text: '{"query":"mutation {\n  cancel_booking(userid: \"celie_loie\", movieId:
+        \"720d006c-3a57-4b6a-b18f-9b713b073f3c\", date: \"20251201\")
+        {\n    userid\n    dates {\n      date\n      movies\n    }\n  }\n}\n"}'
+    headers:
+      - name: Content-Type
+        value: application/json
+        id: pair_24ee4bc01d0a44ddb07134c57cf1c355
+      - name: User-Agent
+        value: insomnia/11.6.1
+        id: pair_bd2e406ab4ff4299b0d17cba3df83a33
+      - id: pair_47bf8dfe73534225b5a5d0b2451b0fdb
+        name: X-User-Id
+        value: celie_loie
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_ff17119db4dd74c5a87dc0152e9f3e8afd0f2b0c
+    created: 1758294411399
+    modified: 1758294411399
+environments:
+  name: Base Environment
+  meta:
+    id: env_ff17119db4dd74c5a87dc0152e9f3e8afd0f2b0c
+    created: 1758294411399
+    modified: 1758294411399
+    isPrivate: false

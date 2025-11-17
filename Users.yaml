@@ -1,0 +1,412 @@
+type: collection.insomnia.rest/5.0
+name: Users
+meta:
+  id: wrk_268f3f1be4f24f42b8b0a45d5d2ee372
+  created: 1758292149466
+  modified: 1758292149466
+  description: ""
+collection:
+  - url: http://127.0.0.1:3203
+    name: Get Page User
+    meta:
+      id: req_59bd447d5f0545a7bf966054665354c9
+      created: 1758292213641
+      modified: 1758292361638
+      isPrivate: false
+      description: ""
+      sortKey: -1758292213641
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/11.6.1
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://127.0.0.1:3203/users
+    name: Get Users Json
+    meta:
+      id: req_9de8f05db0e04157bc2d1dd0be860c6b
+      created: 1758292365150
+      modified: 1758292411510
+      isPrivate: false
+      description: ""
+      sortKey: -1758292213541
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/11.6.1
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://127.0.0.1:3203/users/chris_rivers
+    name: Get User With Id
+    meta:
+      id: req_36e65721c3974e2d8bb9b346cac42b0c
+      created: 1758292440208
+      modified: 1758292468776
+      isPrivate: false
+      description: ""
+      sortKey: -1758292213441
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/11.6.1
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://127.0.0.1:3203/users/celie_ponroy
+    name: Post New User
+    meta:
+      id: req_fa8da35d3f2c4d04b52e66a5279c6bb9
+      created: 1758292532211
+      modified: 1763205833797
+      isPrivate: false
+      description: ""
+      sortKey: -1758292213341
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+              "id": "celie_ponroy",
+              "name": "Celie Ponroy",
+              "last_active":1360031050
+        }
+    parameters:
+      - id: pair_7fc3eddb203f48e2ace20d1fef19890c
+        name: requester_id
+        value: celie_ponroy
+        description: ""
+        disabled: false
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/11.6.1
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://127.0.0.1:3203/users/celie_ponroy
+    name: Delete User Admin
+    meta:
+      id: req_ddfc876ab945435592e7458acb744929
+      created: 1758292825200
+      modified: 1763206553322
+      isPrivate: false
+      description: ""
+      sortKey: -1758292213241
+    method: DELETE
+    body:
+      mimeType: application/json
+      text: |
+        {
+          "requester_id": "chris_rivers"
+        }
+    parameters:
+      - id: pair_b09fb9eacbca4333a4bf21855aec29ef
+        name: ""
+        value: ""
+        description: ""
+        disabled: false
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/11.6.1
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://127.0.0.1:3203/users/celie_ponroy
+    name: Update A User Admin
+    meta:
+      id: req_10c59efb74e2465f8b44e9778787ef48
+      created: 1758292893274
+      modified: 1763206995562
+      isPrivate: false
+      description: ""
+      sortKey: -1758292213141
+    method: PUT
+    body:
+      mimeType: application/json
+      text: |-
+        {
+              "id": "celie_ponroy",
+              "name": "Celie Ponroy",
+              "last_active":1360031050,
+        		  "requester_id": "chris_rivers"
+        }
+    parameters:
+      - id: pair_37b83fc01e494cf5b6e8bd728d1ef7b2
+        name: ""
+        value: ""
+        description: ""
+        disabled: false
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/11.6.1
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://127.0.0.1:3203/users/celie_ponroy
+    name: Update A User Not Admin
+    meta:
+      id: req_bc23518a21184103a856a40ccd36cf45
+      created: 1758294102171
+      modified: 1758294137264
+      isPrivate: false
+      description: ""
+      sortKey: -1758290748117.5
+    method: PUT
+    body:
+      mimeType: application/json
+      text: |-
+        {
+              "id": "celie_loie",
+              "name": "Celie Ponroy",
+              "last_active":1360031050,
+        			"requester_id": "pam_beesly"
+        }
+    parameters:
+      - id: pair_45823109f62f48a9ab3ec1bb95ae9ec9
+        name: requester_id
+        value: chris_rivers
+        description: ""
+        disabled: false
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/11.6.1
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://127.0.0.1:3203/users/celie_ponroy
+    name: "Post New User Fail "
+    meta:
+      id: req_293d898c84f444fabdad2d50b0501546
+      created: 1763205988170
+      modified: 1763206540905
+      isPrivate: false
+      description: ""
+      sortKey: -1758292213291
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+              "id": "celie_ponroy",
+              "name": "Celie Ponroy",
+              "last_active":1360031050
+        }
+    parameters:
+      - id: pair_7fc3eddb203f48e2ace20d1fef19890c
+        name: requester_id
+        value: celie_ponroy
+        description: ""
+        disabled: false
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/11.6.1
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://127.0.0.1:3203/users/celie_ponroy
+    name: Delete User Itself
+    meta:
+      id: req_a5e9c15768094052aa1a5cbf0a22d7ed
+      created: 1763206578257
+      modified: 1763206585212
+      isPrivate: false
+      description: ""
+      sortKey: -1758292213191
+    method: DELETE
+    body:
+      mimeType: application/json
+      text: |
+        {
+          "requester_id": "celie_ponroy"
+        }
+    parameters:
+      - id: pair_b09fb9eacbca4333a4bf21855aec29ef
+        name: ""
+        value: ""
+        description: ""
+        disabled: false
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/11.6.1
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://127.0.0.1:3203/users/hortense_gueguen
+    name: "Delete Unknown User "
+    meta:
+      id: req_2ae959e39eed4556baff6c128140162d
+      created: 1763206657456
+      modified: 1763206672768
+      isPrivate: false
+      description: ""
+      sortKey: -1758292213166
+    method: DELETE
+    body:
+      mimeType: application/json
+      text: |
+        {
+          "requester_id": "chris_rivers"
+        }
+    parameters:
+      - id: pair_b09fb9eacbca4333a4bf21855aec29ef
+        name: ""
+        value: ""
+        description: ""
+        disabled: false
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/11.6.1
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://127.0.0.1:3203/users/garret_heaton
+    name: Delete User Not Admin
+    meta:
+      id: req_121e8a3afbfe410cbb26495e1bbe74af
+      created: 1763206692986
+      modified: 1763206709754
+      isPrivate: false
+      description: ""
+      sortKey: -1758292213153.5
+    method: DELETE
+    body:
+      mimeType: application/json
+      text: |
+        {
+          "requester_id": "celie_ponroy"
+        }
+    parameters:
+      - id: pair_b09fb9eacbca4333a4bf21855aec29ef
+        name: ""
+        value: ""
+        description: ""
+        disabled: false
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/11.6.1
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://127.0.0.1:3203/users/celie_ponroy
+    name: Update A User Itself
+    meta:
+      id: req_ac66426d84cb4660b7a7f3c8c4c0cd1a
+      created: 1763207016191
+      modified: 1763207023113
+      isPrivate: false
+      description: ""
+      sortKey: -1758291480629.25
+    method: PUT
+    body:
+      mimeType: application/json
+      text: |-
+        {
+              "id": "celie_ponroy",
+              "name": "Celie Ponroy",
+              "last_active":1360031050,
+        		  "requester_id": "celie_ponroy"
+        }
+    parameters:
+      - id: pair_37b83fc01e494cf5b6e8bd728d1ef7b2
+        name: ""
+        value: ""
+        description: ""
+        disabled: false
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/11.6.1
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_1cad761d7f9c6bd8eadf5873d3bfaa7462f7c427
+    created: 1758292149474
+    modified: 1758292149474
+environments:
+  name: Base Environment
+  meta:
+    id: env_1cad761d7f9c6bd8eadf5873d3bfaa7462f7c427
+    created: 1758292149473
+    modified: 1758292149473
+    isPrivate: false
