@@ -59,7 +59,7 @@ def get_users():
 @app.route("/users/<userid>", methods=['GET'])
 def get_user_byid(userid):
     if config.USE_MONGO:
-        user = users_collection.find_one({"id": int(userid)})
+        user = users_collection.find_one({"id": userid})
         if user:
             user["_id"] = str(user["_id"])
             return make_response(jsonify(user), 200)
@@ -75,10 +75,11 @@ def add_user(userid):
     req = request.get_json()
     # Vérifier que l'ID n'existe pas déjà
     if config.USE_MONGO:
-        if users_collection.find_one({"id": int(userid)}):
+        if users_collection.find_one({"id": str(userid)}):
             return make_response(jsonify({"error": "User ID already exists"}), 400)
         # Ajouter le nouvel utilisateur
-        users_collection.insert_one(req)
+        result = users_collection.insert_one(req)
+        req["_id"] = str(result.inserted_id)
         return make_response(jsonify(req), 200)
     else:
         if any(str(u["id"]) == str(userid) for u in users):
@@ -94,13 +95,13 @@ def delete_user(userid):
     req = request.get_json()
     requester_id = req.get("requester_id")
     if config.USE_MONGO:
-        requester = users_collection.find_one({"id": int(requester_id)})
-        if not requester or (int(requester_id) != int(userid) and not requester.get("admin", False)):
+        requester = users_collection.find_one({"id": requester_id})
+        if not requester or (requester_id != userid and not requester.get("admin", False)):
             return make_response(jsonify({"error": "Only admin or the user itself can delete users"}), 403)
-        user = users_collection.find_one({"id": int(userid)})
+        user = users_collection.find_one({"id": userid})
         if not user:
             return make_response(jsonify({"error": "User ID not found"}), 404)
-        users_collection.delete_one({"id": int(userid)})
+        users_collection.delete_one({"id": userid})
         return make_response(jsonify({"message": f"User ID {userid} deleted"}), 200)
     else:
         requester = next((u for u in users if str(u["id"]) == str(requester_id)), None)
@@ -119,18 +120,18 @@ def update_user(userid):
     req = request.get_json()
     requester_id = req.get("requester_id")
     if config.USE_MONGO:
-        requester = users_collection.find_one({"id": int(requester_id)})
-        if not requester or (int(requester_id) != int(userid) and not requester.get("admin", False)):
+        requester = users_collection.find_one({"id": str(requester_id)})
+        if not requester or (str(requester_id) != str(userid) and not requester.get("admin", False)):
             return make_response(jsonify({"error": "Only admin or the user itself can update users"}), 403)
-        user = users_collection.find_one({"id": int(userid)})
+        user = users_collection.find_one({"id": str(userid)})
         if not user:
             return make_response(jsonify({"error": "User ID not found"}), 404)
         # Évite d’écraser requester_id ou id
         update_data = req.copy()
         update_data.pop("requester_id", None)
         update_data.pop("id", None)
-        users_collection.update_one({"id": int(userid)}, {"$set": update_data})
-        updated_user = users_collection.find_one({"id": int(userid)})
+        users_collection.update_one({"id": str(userid)}, {"$set": update_data})
+        updated_user = users_collection.find_one({"id": str(userid)})
         updated_user["_id"] = str(updated_user["_id"])
         return make_response(jsonify(updated_user), 200)
     else:
