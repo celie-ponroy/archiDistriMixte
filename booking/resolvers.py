@@ -7,8 +7,6 @@ from protos import schedule_pb2, schedule_pb2_grpc
 from pymongo import MongoClient
 
 
-
-
 USE_MONGO = os.getenv("USE_MONGO", "false").lower() == "true"
 USE_DOCKER = os.getenv("USE_DOCKER", "false").lower() == "true"
 MONGO_URL = os.getenv("MONGO_URL", "mongodb://mongo:27017/archiDistriDB")
@@ -19,17 +17,30 @@ else:
     USER_SERVICE_URL = "http://localhost:3203" 
     MOVIE_SERVICE_URL = "http://localhost:3200/graphql" 
 
+if USE_DOCKER:
+    SCHEDULE_GRPC_URL = "schedule:50051"
+else:
+    SCHEDULE_GRPC_URL = "localhost:50051"
+
 #connection à mongo 
 if USE_MONGO:
     client = MongoClient(MONGO_URL)
     db = client["archiDistriDB"]
-    movies_collection = db["movies"]
-    actors_collection = db["actors"]
+    bookings_collection = db["bookings"]
+
+    if bookings_collection.count_documents({}) == 0:
+        with open('./data/bookings.json', 'r') as jsf:
+            initial_bookings = json.load(jsf)["bookings"]
+            bookings_collection.insert_many(initial_bookings)
+    else:
+        with open('./data/bookings.json', "r") as jsf:
+            bookings = json.load(jsf)["bookings"]
+    
 
 
 def is_movie_scheduled(date: str, movie_id: str) -> bool:
     # Return true si le movie existe à la bonne date
-    with grpc.insecure_channel("localhost:50051") as channel:
+    with grpc.insecure_channel(SCHEDULE_GRPC_URL) as channel:
         stub = schedule_pb2_grpc.ScheduleStub(channel)
         schedule = stub.GetScheduleByDate(schedule_pb2.ScheduleDate(date=date))
         return movie_id in schedule.movies

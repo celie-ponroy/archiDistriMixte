@@ -11,6 +11,24 @@ if USE_MONGO:
     db = client["archiDistriDB"]
     movies_collection = db["movies"]
     actors_collection = db["actors"]
+    
+    if movies_collection.count_documents({}) == 0:
+        with open('./data/movies.json', 'r') as jsf:
+            initial_movies = json.load(jsf)["movies"]
+            movies_collection.insert_many(initial_movies)
+        movies = list(movies_collection.find({}))
+    else:
+        with open('./data/movies.json', "r") as jsf:
+            movies = json.load(jsf)["movies"]
+    
+    if actors_collection.count_documents({}) == 0:
+        with open('./data/actors.json', 'r') as jsf:
+            initial_actors = json.load(jsf)["actors"]
+            actors_collection.insert_many(initial_actors)
+        actors = list(actors_collection.find({}))
+    else:
+        with open('./data/actors.json', "r") as jsf:
+            actors = json.load(jsf)["actors"]
 
 def movie_with_id(_,info,_id):
     if USE_MONGO:
