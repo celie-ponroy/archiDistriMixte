@@ -9,7 +9,7 @@ class AppConfig:
     def __init__(self):
         self.USE_MONGO = os.getenv("USE_MONGO", "false").lower() == "true"
         self.USE_DOCKER = os.getenv("USE_DOCKER", "false").lower() == "true"
-        self.MONGO_URL = os.getenv("MONGO_URL", "mongodb://localhost:27017/archiDistriDB")
+        self.MONGO_URL = os.getenv("MONGO_URL", "mongodb://mongo:27017/archiDistriDB")
 
     @property
     def mongo_url(self):

@@ -2,46 +2,46 @@ services:
   movie:
     build: ./movie
     ports:
-      - "3200:3200"
+      - "3200:3200" 
     environment:
       - USE_MONGO=true
-      - MONGO_URL=mongodb://mongo:27018/archiDistriDB
+      - MONGO_URL=mongodb://mongo:27017/archiDistriDB
       - USE_DOCKER=true
     depends_on:
       - mongo
     restart: unless-stopped
 
   user:
-    build: ./user/
+    build: ./user
     ports:
-      - "3201:3203"
+      - "3203:3203"
     environment:
       - USE_MONGO=true
-      - MONGO_URL=mongodb://mongo:27018/archiDistriDB
+      - MONGO_URL=mongodb://mongo:27017/archiDistriDB
       - USE_DOCKER=true
     depends_on:
       - mongo
     restart: unless-stopped
 
   booking:
-    build: ./booking/
+    build: ./booking
     ports:
-      - "3202:5000"
+      - "3201:3001"
     environment:
       - USE_MONGO=true
-      - MONGO_URL=mongodb://mongo:27018/archiDistriDB
+      - MONGO_URL=mongodb://mongo:27017/archiDistriDB
       - USE_DOCKER=true
     depends_on:
       - mongo
     restart: unless-stopped
 
   schedule:
-    build: ./schedule/
+    build: ./schedule
     ports:
-      - "3203:50051"
+      - "50051:50051" 
     environment:
       - USE_MONGO=true
-      - MONGO_URL=mongodb://mongo:27018/archiDistriDB
+      - MONGO_URL=mongodb://mongo:27017/archiDistriDB
       - USE_DOCKER=true
     depends_on:
       - mongo
@@ -52,9 +52,11 @@ services:
     container_name: mongo
     restart: always
     ports:
-      - "27018:27018"
+      - "27017:27017"
     volumes:
       - mongo_data:/data/db
+    environment:
+      - MONGO_INITDB_DATABASE=archiDistriDB
 
 volumes:
   mongo_data:

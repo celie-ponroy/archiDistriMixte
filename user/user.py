@@ -6,7 +6,7 @@ from pymongo import MongoClient
 class AppConfig:
     def __init__(self):
         self.USE_MONGO = os.getenv("USE_MONGO", "false").lower() == "true"
-        self.MONGO_URL = os.getenv("MONGO_URL", "mongodb://localhost:27017/archiDistriDB")
+        self.MONGO_URL = os.getenv("MONGO_URL", "mongodb://mongo:27017/archiDistriDB")
 
     @property
     def mongo_url(self):
@@ -20,12 +20,12 @@ if config.USE_MONGO:
     db = client["archiDistriDB"]
     users_collection = db["users"]
     if users_collection.count_documents({}) == 0:
-        with open('./databases/users.json', 'r') as jsf:
+        with open('./data/users.json', 'r') as jsf:
             initial_users = json.load(jsf)["users"]
             users_collection.insert_many(initial_users)
     users = list(users_collection.find({}))
 else:
-    with open('./databases/users.json', "r") as jsf:
+    with open('./data/users.json', "r") as jsf:
         users = json.load(jsf)["users"]
 
 # Fonction pour écrire dans le fichier JSON

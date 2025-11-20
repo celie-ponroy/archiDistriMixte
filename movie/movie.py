@@ -7,7 +7,8 @@ from pymongo import MongoClient
 # Configuration centralisée
 USE_MONGO = os.getenv("USE_MONGO", "false").lower() == "true"
 USE_DOCKER = os.getenv("USE_DOCKER", "false").lower() == "true"
-MONGO_URL = os.getenv("MONGO_URL", "mongodb://localhost:27017/archiDistriDB")
+MONGO_URL = os.getenv("MONGO_URL", "mongodb://mongo:27017/archiDistriDB")
+
 
 # Connexion à MongoDB si nécessaire
 if USE_MONGO:
@@ -16,7 +17,7 @@ if USE_MONGO:
     movies_collection = db["movies"]
     actors_collection = db["actors"]
 
-PORT = 3002
+PORT = 3200
 HOST = '0.0.0.0'
 app = Flask(__name__)
 

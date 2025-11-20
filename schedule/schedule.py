@@ -2,14 +2,31 @@ import json
 import grpc
 from concurrent import futures
 import os
+import time
 from pymongo import MongoClient
+from pymongo.errors import ConnectionFailure
 import schedule_pb2
 import schedule_pb2_grpc
+
+def wait_for_mongo(client, max_retries=10, retry_interval=2):
+    retries = 0
+    while retries < max_retries:
+        try:
+            # Essayer une commande simple pour vérifier la connexion
+            client.admin.command('ping')
+            print("Connexion à MongoDB établie avec succès.")
+            return True
+        except ConnectionFailure:
+            retries += 1
+            print(f"MongoDB n'est pas encore prêt (essai {retries}/{max_retries}). Réessai dans {retry_interval} secondes...")
+            time.sleep(retry_interval)
+    print("Impossible de se connecter à MongoDB après plusieurs tentatives.")
+    return False
 
 class AppConfig:
     def __init__(self):
         self.USE_MONGO = os.getenv("USE_MONGO", "false").lower() == "true"
-        self.MONGO_URL = os.getenv("MONGO_URL", "mongodb://localhost:27017/archiDistriDB")
+        self.MONGO_URL = os.getenv("MONGO_URL", "mongodb://mongo:27017/archiDistriDB")
 
     @property
     def mongo_url(self):
@@ -20,10 +37,14 @@ config = AppConfig()
 class MyScheduleServicer(schedule_pb2_grpc.ScheduleServicer):
     def __init__(self):
         if config.USE_MONGO:
-            # Connexion à MongoDB
+            # Connexion à MongoDB avec authentification
             client = MongoClient(config.mongo_url)
+            if not wait_for_mongo(client):
+                raise ConnectionError("Impossible de se connecter à MongoDB.")
+
             db = client["archiDistriDB"]
             self.collection = db["schedules"]
+
             # Vérifie si la collection est vide et initialise-la si nécessaire
             if self.collection.count_documents({}) == 0:
                 with open('./data/schedule.json', 'r') as jsf:
