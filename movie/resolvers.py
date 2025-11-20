@@ -30,6 +30,15 @@ if USE_MONGO:
         with open('./data/actors.json', "r") as jsf:
             actors = json.load(jsf)["actors"]
 
+def movies(_,info):
+    if USE_MONGO:
+            movie = movies_collection.find(({}))
+            return movie
+    else:
+        with open('{}/data/movies.json'.format("."), "r") as file:
+            movies = json.load(file)
+            return movies
+
 def movie_with_id(_,info,_id):
     if USE_MONGO:
             movie = movies_collection.find_one({"id": _id})
@@ -41,6 +50,19 @@ def movie_with_id(_,info,_id):
                 if movie['id'] == _id:
                     return movie
                 
+def movie_with_title(_, info, title):
+    if USE_MONGO:
+        movie = movies_collection.find_one({"title": title})
+        return movie
+    else:
+        with open('./data/movies.json', "r") as file:
+            data = json.load(file)
+            for movie in data["movies"]:
+                if movie["title"] == title:
+                    return movie
+        return None
+
+
 def update_movie_rate(_,info,_id,_rate):
     newmovies = {}
     newmovie = {}
@@ -62,12 +84,47 @@ def update_movie_rate(_,info,_id,_rate):
             json.dump(newmovies, wfile)
         return newmovie
 
-def resolve_actors_in_movie(movie, info):
+def create_movie(_, info, id, title, director, rating, actors=None):
+    if actors is None:
+        actors = []
+
+    new_movie = {
+        "id": id,
+        "title": title,
+        "director": director,
+        "rating": float(rating),
+        "actors": actors
+    }
+
     if USE_MONGO:
-        actors = list(actors_collection.find({"films": movie["id"]}))
-        return actors
+        movies_collection.insert_one(new_movie)
+        return new_movie
+    
     else:
-        with open('{}/data/actors.json'.format("."), "r") as file:
-            actors = json.load(file)
-            result = [actor for actor in actors['actors'] if movie['id'] in actor['films']]
-            return result
+        with open('./data/movies.json', "r") as rfile:
+            data = json.load(rfile)
+
+        data["movies"].append(new_movie)
+
+        with open('./data/movies.json', "w") as wfile:
+            json.dump(data, wfile, indent=4)
+
+        return new_movie
+
+def delete_movie(_, info, id):
+    if USE_MONGO:
+        result = movies_collection.delete_one({"id": id})
+        return result.deleted_count > 0
+    
+    else:
+        with open('./data/movies.json', "r") as rfile:
+            data = json.load(rfile)
+
+        before = len(data["movies"])
+        data["movies"] = [m for m in data["movies"] if m["id"] != id]
+        after = len(data["movies"])
+
+        with open('./data/movies.json', "w") as wfile:
+            json.dump(data, wfile, indent=4)
+
+        return after < before

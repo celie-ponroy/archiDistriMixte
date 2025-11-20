@@ -23,7 +23,6 @@ paths:
           application/json:
             schema:
               type: object
-              required: [id, name, last_active]
               properties:
                 id:
                   type: string
@@ -31,16 +30,13 @@ paths:
                   type: string
                 last_active:
                   type: integer
-                requester_id:
-                  type: string
             examples:
-              create_user:
-                summary: Exemple création utilisateur
+              user_example:
+                summary: Exemple d'utilisateur
                 value:
-                  id: celie_ponroy
-                  name: Celie Ponroy
+                  id: "celie_ponroy"
+                  name: "Celie Ponroy"
                   last_active: 1360031050
-                  requester_id: celie_ponroy
       responses:
         '201':
           description: Utilisateur créé
@@ -71,10 +67,7 @@ paths:
           application/json:
             schema:
               type: object
-              required: [requester_id]
               properties:
-                id:
-                  type: string
                 name:
                   type: string
                 last_active:
@@ -82,27 +75,12 @@ paths:
                 requester_id:
                   type: string
             examples:
-              update_self:
-                summary: Mise à jour par soi-même
+              update_user_example:
+                summary: Mise à jour utilisateur
                 value:
-                  id: celie_ponroy
-                  name: Celie Ponroy
+                  name: "Celie Ponroy"
                   last_active: 1360031050
-                  requester_id: celie_ponroy
-              update_admin:
-                summary: Mise à jour par admin
-                value:
-                  id: celie_ponroy
-                  name: Celie Ponroy
-                  last_active: 1360031050
-                  requester_id: chris_rivers
-              update_not_admin:
-                summary: Tentative mise à jour par non-admin
-                value:
-                  id: celie_loie
-                  name: Celie Ponroy
-                  last_active: 1360031050
-                  requester_id: pam_beesly
+                  requester_id: "chris_rivers"
       responses:
         '200':
           description: Utilisateur mis à jour
@@ -120,24 +98,14 @@ paths:
           application/json:
             schema:
               type: object
-              required: [requester_id]
               properties:
                 requester_id:
                   type: string
             examples:
-              delete_self:
-                summary: Suppression par soi-même
+              delete_user_example:
+                summary: Supprimer un utilisateur
                 value:
-                  requester_id: celie_ponroy
-              delete_admin:
-                summary: Suppression par admin
-                value:
-                  requester_id: chris_rivers
-              delete_not_admin:
-                summary: Tentative suppression par non-admin
-                value:
-                  requester_id: celie_ponroy
-              delete_unknown:
-                summary: Suppression d'un utilisateur inconnu
-                value:
-                  requester_id: chris_rivers
+                  requester_id: "chris_rivers"
+      responses:
+        '200':
+          description: Utilisateur supprimé
