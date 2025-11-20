@@ -1,12 +1,11 @@
-version: "3.9"
 services:
   movie:
-    build: ./movie/
+    build: ./movie
     ports:
       - "3200:3200"
     environment:
       - USE_MONGO=true
-      - MONGO_URL=mongodb://mongo:27017/archiDistriDB
+      - MONGO_URL=mongodb://mongo:27018/archiDistriDB
       - USE_DOCKER=true
     depends_on:
       - mongo
@@ -15,10 +14,10 @@ services:
   user:
     build: ./user/
     ports:
-      - "3201:5000"
+      - "3201:3203"
     environment:
       - USE_MONGO=true
-      - MONGO_URL=mongodb://mongo:27017/archiDistriDB
+      - MONGO_URL=mongodb://mongo:27018/archiDistriDB
       - USE_DOCKER=true
     depends_on:
       - mongo
@@ -30,7 +29,7 @@ services:
       - "3202:5000"
     environment:
       - USE_MONGO=true
-      - MONGO_URL=mongodb://mongo:27017/archiDistriDB
+      - MONGO_URL=mongodb://mongo:27018/archiDistriDB
       - USE_DOCKER=true
     depends_on:
       - mongo
@@ -42,7 +41,7 @@ services:
       - "3203:50051"
     environment:
       - USE_MONGO=true
-      - MONGO_URL=mongodb://mongo:27017/archiDistriDB
+      - MONGO_URL=mongodb://mongo:27018/archiDistriDB
       - USE_DOCKER=true
     depends_on:
       - mongo
@@ -53,7 +52,7 @@ services:
     container_name: mongo
     restart: always
     ports:
-      - "27017:27017"
+      - "27018:27018"
     volumes:
       - mongo_data:/data/db
 
