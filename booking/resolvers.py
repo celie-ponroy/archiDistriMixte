@@ -1,11 +1,31 @@
 import json
+import os
 
 import requests 
 import grpc
 from protos import schedule_pb2, schedule_pb2_grpc
+from pymongo import MongoClient
 
-USER_SERVICE_URL = "http://localhost:3203" 
-MOVIE_SERVICE_URL = "http://localhost:3002/graphql" 
+
+
+
+USE_MONGO = os.getenv("USE_MONGO", "false").lower() == "true"
+USE_DOCKER = os.getenv("USE_DOCKER", "false").lower() == "true"
+MONGO_URL = os.getenv("MONGO_URL", "mongodb://mongo:27017/archiDistriDB")
+if USE_DOCKER:
+    USER_SERVICE_URL = "http://user:3203"
+    MOVIE_SERVICE_URL = "http://movie:3200/graphql"
+else:
+    USER_SERVICE_URL = "http://localhost:3203" 
+    MOVIE_SERVICE_URL = "http://localhost:3200/graphql" 
+
+#connection à mongo 
+if USE_MONGO:
+    client = MongoClient(MONGO_URL)
+    db = client["archiDistriDB"]
+    movies_collection = db["movies"]
+    actors_collection = db["actors"]
+
 
 def is_movie_scheduled(date: str, movie_id: str) -> bool:
     # Return true si le movie existe à la bonne date
@@ -32,29 +52,47 @@ def booking_with_id(_, info, userid):
 
     if not (is_admin or is_owner):
         raise Exception("Accès refusé : seuls les admins ou le propriétaire peuvent accéder aux bookings")
-
     # Lecture des bookings
-    with open('./data/bookings.json', "r") as file:
-        bookings_data = json.load(file)
+    if USE_MONGO:
+        bookings_collection = db["bookings"]
+        user_bookings = bookings_collection.find({"userid": userid})
         result = []
-        for booking in bookings_data.get("bookings", []):
-            if str(booking.get("userid")) == str(userid):
-                for date_entry in booking.get("dates", []):
-                    date_str = date_entry.get("date")
-                    for movie_id in date_entry.get("movies", []):
-                        result.append({
-                            "userid": userid,
-                            "movieId": movie_id,
-                            "showtime": date_str
-                        })
+        for booking in user_bookings:
+            for date_entry in booking.get("dates", []):
+                date_str = date_entry.get("date")
+                for movie_id in date_entry.get("movies", []):
+                    result.append({
+                        "userid": userid,
+                        "movieId": movie_id,
+                        "showtime": date_str
+                    })
         return result
+    else:
+        with open('./data/bookings.json', "r") as file:
+            bookings_data = json.load(file)
+            result = []
+            for booking in bookings_data.get("bookings", []):
+                if str(booking.get("userid")) == str(userid):
+                    for date_entry in booking.get("dates", []):
+                        date_str = date_entry.get("date")
+                        for movie_id in date_entry.get("movies", []):
+                            result.append({
+                                "userid": userid,
+                                "movieId": movie_id,
+                                "showtime": date_str
+                            })
+            return result
     
 def movie_exists(_id):
-    with open('./data/movies.json', "r") as file:
-        movies = json.load(file)
-        for movie in movies.get('movies', []):
-            if movie['id'] == _id:
-                return True
+    if USE_MONGO:
+        movie = movies_collection.find_one({"id": _id})
+        return movie is not None
+    else:
+        with open('./data/movies.json', "r") as file:
+            movies = json.load(file)
+            for movie in movies.get('movies', []):
+                if movie['id'] == _id:
+                    return True
     return False
 
             
@@ -119,8 +157,16 @@ def create_booking(_, info, userid, movieId, date):
         user_booking = new_booking
 
     # Écriture du fichier
-    with open('./data/bookings.json', "w") as wfile:
-        json.dump(bookings_data, wfile, indent=2)
+    if USE_MONGO:
+        bookings_collection = db["bookings"]
+        bookings_collection.update_one(
+            {"userid": userid},
+            {"$set": user_booking},
+            upsert=True
+        )
+    else:
+        with open('./data/bookings.json', "w") as wfile:
+            json.dump(bookings_data, wfile, indent=2)
 
     return user_booking
 
@@ -164,8 +210,16 @@ def cancel_booking(_, info, userid, movieId, date):
     bookings_data["bookings"] = [b for b in bookings_data["bookings"] if b["dates"]]
 
     # Écriture du fichier
-    with open('./data/bookings.json', "w") as wfile:
-        json.dump(bookings_data, wfile, indent=2)
+    if USE_MONGO:
+        bookings_collection = db["bookings"]
+        bookings_collection.update_one(
+            {"userid": userid},
+            {"$set": user_booking},
+            upsert=True
+        )
+    else:
+        with open('./data/bookings.json', "w") as wfile:
+            json.dump(bookings_data, wfile, indent=2)
 
     return user_booking
 
