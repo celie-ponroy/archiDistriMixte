@@ -183,12 +183,10 @@ def create_booking(_, info, userid, movieId, date):
 
 
 def cancel_booking(_, info, userid, movieId, date):
-    # Récupérer l'utilisateur courant
     requester_id = info.context.headers.get("X-User-Id")
     if not requester_id:
         raise Exception("Utilisateur non authentifié")
 
-    # Vérifier si l'utilisateur courant est admin ou propriétaire
     user_response = requests.get(f"{USER_SERVICE_URL}/users/{requester_id}")
     if user_response.status_code != 200:
         raise Exception("Utilisateur courant introuvable")
@@ -200,35 +198,31 @@ def cancel_booking(_, info, userid, movieId, date):
     if not (is_admin or is_owner):
         raise Exception("Accès refusé : seuls les admins ou le propriétaire peuvent annuler cette réservation")
 
-    # Lecture du fichier bookings
-    with open('./data/bookings.json', "r") as rfile:
-        bookings_data = json.load(rfile)
+    if USE_MONGO:
+        bookings_collection = db["bookings"]
+        user_booking = bookings_collection.find_one({"userid": userid})
+        if not user_booking:
+            raise Exception("Booking introuvable pour cet utilisateur")
+    else:
+        with open('./data/bookings.json', "r") as rfile:
+            bookings_data = json.load(rfile)
+        user_booking = next((b for b in bookings_data.get("bookings", []) if b.get("userid") == userid), None)
+        if not user_booking:
+            raise Exception("Booking introuvable pour cet utilisateur")
 
-    # Chercher le booking de l'utilisateur
-    user_booking = next((b for b in bookings_data.get("bookings", []) if b.get("userid") == userid), None)
-    if not user_booking:
-        raise Exception("Booking introuvable pour cet utilisateur")
-
-    # Chercher la date correspondante et retirer le movie
     for date_entry in user_booking["dates"]:
         if date_entry["date"] == date and movieId in date_entry["movies"]:
             date_entry["movies"].remove(movieId)
 
-    # Supprimer les dates vides
     user_booking["dates"] = [d for d in user_booking["dates"] if d["movies"]]
 
-    # Supprimer le booking si plus de dates
-    bookings_data["bookings"] = [b for b in bookings_data["bookings"] if b["dates"]]
-
-    # Écriture du fichier
     if USE_MONGO:
-        bookings_collection = db["bookings"]
-        bookings_collection.update_one(
-            {"userid": userid},
-            {"$set": user_booking},
-            upsert=True
-        )
+        if not user_booking["dates"]:
+            bookings_collection.delete_one({"userid": userid})
+        else:
+            bookings_collection.update_one({"userid": userid}, {"$set": user_booking}, upsert=True)
     else:
+        bookings_data["bookings"] = [b for b in bookings_data["bookings"] if b["dates"]]
         with open('./data/bookings.json', "w") as wfile:
             json.dump(bookings_data, wfile, indent=2)
 

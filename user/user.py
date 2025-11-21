@@ -31,7 +31,7 @@ else:
 # Fonction pour écrire dans le fichier JSON
 def write(users):
     if not config.USE_MONGO:
-        with open('./databases/users.json', 'w') as f:
+        with open('./data/users.json', 'w') as f:
             full = {"users": users}
             json.dump(full, f, indent=2)
 
@@ -46,14 +46,12 @@ def home():
 # Récupérer tous les utilisateurs
 @app.route("/users", methods=['GET'])
 def get_users():
-    if config.USE_MONGO:
+   if config.USE_MONGO:
         users = list(users_collection.find({}))
         # Convertir les ObjectId en str pour la réponse JSON
         for user in users:
             user["_id"] = str(user["_id"])
-        return make_response(jsonify(users), 200)
-    else:
-        return make_response(jsonify(users), 200)
+   return make_response(jsonify(users), 200)
 
 # Récupérer un utilisateur par son ID
 @app.route("/users/<userid>", methods=['GET'])
